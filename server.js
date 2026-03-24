@@ -193,12 +193,22 @@ app.delete('/api/employees/:id', requireAuth, async (req, res) => {
 // ══════════════════════════════════════
 // GROQ PROXY (key stays on server)
 // ══════════════════════════════════════
-const GROQ_API_KEY = process.env.GROQ_API_KEY || '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';
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 app.post('/api/ocr', requireAuth, async (req, res) => {
   try {
     const { image, mimeType, prompt } = req.body;
-    
+
+    if (!image || !prompt) {
+      return res.status(400).json({ error: 'Imagem e prompt são obrigatórios' });
+    }
+
+    if (!GROQ_API_KEY) {
+      return res.status(500).json({ error: 'Chave da API Groq não configurada no servidor' });
+    }
+
+    console.log('OCR Request - Image size:', Math.round(image.length / 1024), 'KB, MIME:', mimeType);
+
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -206,34 +216,51 @@ app.post('/api/ocr', requireAuth, async (req, res) => {
         'Authorization': 'Bearer ' + GROQ_API_KEY,
       },
       body: JSON.stringify({
-        model: 'llama-4-scout-17b-16e-instruct',
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
         messages: [{
           role: 'user',
           content: [
-            { type: 'image_url', image_url: { url: 'data:' + mimeType + ';base64,' + image } },
+            { 
+              type: 'image_url', 
+              image_url: { 
+                url: 'data:' + (mimeType || 'image/jpeg') + ';base64,' + image 
+              } 
+            },
             { type: 'text', text: prompt }
           ]
         }],
-        max_tokens: 2048,
+        max_completion_tokens: 2048,
         temperature: 0.1,
       })
     });
 
+    const responseText = await response.text();
+    console.log('Groq response status:', response.status);
+
     if (!response.ok) {
-      const err = await response.text();
-      console.error('Groq error:', err);
-      return res.status(500).json({ error: 'Erro na API Groq: ' + response.status });
+      console.error('Groq API error:', responseText);
+      return res.status(500).json({ error: 'Erro na API Groq: ' + response.status + ' - ' + responseText.substring(0, 200) });
     }
 
-    const data = await response.json();
+    const data = JSON.parse(responseText);
     let text = data.choices?.[0]?.message?.content || '';
+    console.log('Groq raw response:', text.substring(0, 300));
+    
+    // Clean JSON from markdown fences
     text = text.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
     
-    const parsed = JSON.parse(text);
+    // Try to find JSON in the response
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      console.error('No JSON found in response:', text);
+      return res.status(500).json({ error: 'A IA não retornou dados válidos. Tente com outra imagem.' });
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]);
     res.json(parsed);
   } catch (err) {
-    console.error('OCR Error:', err);
-    res.status(500).json({ error: 'Erro ao processar imagem' });
+    console.error('OCR Error:', err.message);
+    res.status(500).json({ error: 'Erro ao processar imagem: ' + err.message });
   }
 });
 
