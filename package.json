@@ -1,11 +1,10 @@
 {
   "name": "sistema-rh",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Sistema RH - Gestão de Funcionários",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -14,6 +13,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-session": "^1.18.0",
+    "mammoth": "^1.8.0",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.13.0"
   }
 }
