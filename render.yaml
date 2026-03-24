@@ -1,0 +1,24 @@
+databases:
+  - name: sistema-rh-db
+    plan: free
+    databaseName: sistema_rh
+    user: rh_user
+
+services:
+  - type: web
+    name: sistema-rh
+    plan: free
+    runtime: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sistema-rh-db
+          property: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: GROQ_API_KEY
+        value: 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
+      - key: NODE_ENV
+        value: production
