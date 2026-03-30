@@ -3,84 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema RH — Gestão de Funcionários</title>
+<title>Sistema RH — Villas Garden</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
-  :root{--bg:#f0f2f5;--sidebar:#0c1222;--card:#fff;--border:#e3e6eb;--text:#0f172a;--text-sec:#5a6577;--text-muted:#8e99a9;--accent:#2563eb;--accent-light:#dbeafe;--accent-dark:#1d4ed8;--success:#059669;--success-light:#d1fae5;--danger:#dc2626;--danger-light:#fee2e2;--warning:#d97706}
-  *{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
-  ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c8cdd4;border-radius:10px}
-  input,select,textarea{font-family:inherit}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(37,99,235,.1)!important}
-  .login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#0c1222,#1e3a5f)}
-  .login-card{background:#fff;border-radius:20px;padding:48px 40px;width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-  .login-logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;color:#fff;margin:0 auto 20px}
-  .login-title{text-align:center;font-size:22px;font-weight:800;margin-bottom:4px}.login-sub{text-align:center;font-size:13px;color:var(--text-sec);margin-bottom:28px}
-  .login-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:12px;background:#f8f9fb}
-  .login-btn{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}.login-btn:hover{background:var(--accent-dark)}
-  .login-toggle{text-align:center;margin-top:18px;font-size:13px;color:var(--text-sec)}.login-toggle a{color:var(--accent);cursor:pointer;font-weight:600;text-decoration:none}
-  .login-error{background:var(--danger-light);color:var(--danger);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none}
-  .app{display:none;height:100vh;overflow:hidden}
-  .sidebar{width:250px;min-width:250px;background:var(--sidebar);display:flex;flex-direction:column}
-  .sidebar-header{padding:24px 20px;border-bottom:1px solid rgba(255,255,255,.06)}.sidebar-brand{display:flex;align-items:center;gap:12px}
-  .sidebar-logo{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#2563eb,#60a5fa);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff}
-  .sidebar-title{color:#f1f5f9;font-size:17px;font-weight:700}.sidebar-sub{color:#5a6577;font-size:11px;margin-top:2px}
-  .sidebar-nav{flex:1;padding:16px 10px;display:flex;flex-direction:column;gap:2px}
-  .nav-label{font-size:10px;font-weight:700;color:#4a5568;text-transform:uppercase;letter-spacing:.08em;padding:16px 12px 8px}
-  .nav-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:8px;cursor:pointer;transition:all .2s;color:#8e99a9;font-size:13.5px;font-weight:500;user-select:none}
-  .nav-item:hover{background:rgba(96,165,250,.08);color:#bcc5d3}.nav-item.active{background:rgba(96,165,250,.14);color:#60a5fa;font-weight:600}
-  .nav-icon{font-size:17px;width:22px;text-align:center;flex-shrink:0}
-  .sidebar-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.06)}.sidebar-footer-info{font-size:12px;color:#4a5568;margin-bottom:8px}
-  .logout-btn{width:100%;padding:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#8e99a9;font-size:12px;cursor:pointer;font-family:inherit;font-weight:600}
-  .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-  .topbar{background:var(--card);padding:16px 30px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}.topbar h1{font-size:18px;font-weight:700}
-  .content{flex:1;overflow-y:auto;padding:28px 30px}
-  .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
-  .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-dark)}.btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}.btn-success{background:var(--success);color:#fff}.btn-danger{background:var(--danger-light);color:var(--danger);border:1px solid #fecaca}
-  .btn-sm{padding:6px 14px;font-size:12px}.btn-lg{padding:13px 28px;font-size:15px;font-weight:700}
-  .search-input{padding:9px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#f8f9fb;width:280px}
-  .card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:24px;margin-bottom:14px}
-  .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:24px}
-  .stat-card{background:var(--card);border-radius:14px;padding:22px;border:1px solid var(--border)}.stat-label{font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:8px}.stat-value{font-size:32px;font-weight:800}
-  .table-wrap{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden}
-  table{width:100%;border-collapse:collapse}thead th{padding:13px 18px;text-align:left;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--border);background:#f8f9fb}
-  tbody td{padding:13px 18px;font-size:13px;color:var(--text-sec);border-bottom:1px solid #f4f5f7}tbody tr{cursor:pointer;transition:background .15s}tbody tr:hover{background:#f8f9fb}
-  .avatar{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.avatar-lg{width:56px;height:56px;font-size:20px;border-radius:14px}
-  .badge{font-size:11px;font-weight:600;padding:3px 10px;border-radius:6px}
-  .form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 14px}.form-grid .full{grid-column:1/-1}
-  .form-group label{display:block;font-size:11px;font-weight:600;color:var(--text-sec);margin-bottom:4px;text-transform:uppercase;letter-spacing:.02em}
-  .form-group input,.form-group select,.form-group textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#f8f9fb}.form-group .filled{border-color:#93c5fd;background:rgba(37,99,235,.03)}
-  .form-group textarea{resize:vertical;min-height:70px}
-  .upload-zone{border:2px dashed #c8cdd4;border-radius:14px;padding:50px 30px;text-align:center;cursor:pointer;transition:all .2s;background:#fafbfc}.upload-zone:hover{border-color:var(--accent)}
-  .step-num{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
-  .check-card{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;border:2px solid var(--border);cursor:pointer;transition:all .15s}.check-card.selected{border-color:var(--accent);background:rgba(37,99,235,.03)}
-  .check-box{width:20px;height:20px;border-radius:6px;border:2px solid #c8cdd4;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;flex-shrink:0}.check-card.selected .check-box{background:var(--accent);border-color:var(--accent)}
-  .section-label{font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:14px}
-  .detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px 20px}.detail-label{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:3px}.detail-value{font-size:14px;font-weight:500}
-  .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.action-card{background:var(--card);border-radius:14px;padding:26px;border:1px solid var(--border);cursor:pointer;transition:all .2s}.action-card:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(0,0,0,.06);transform:translateY(-1px)}
-  .result-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
-  .img-preview{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border)}.img-preview img{width:100%;max-height:380px;object-fit:contain;background:#f4f5f7;display:block}
-  .img-close{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:7px;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
-  .photo-upload{width:120px;height:140px;border-radius:12px;border:2px dashed #c8cdd4;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:#f8f9fb;flex-shrink:0}.photo-upload:hover{border-color:var(--accent)}.photo-upload img{width:100%;height:100%;object-fit:cover}
-  .empty{text-align:center;padding:60px 20px;color:var(--text-muted)}
-  .toast{position:fixed;top:20px;right:20px;padding:13px 22px;border-radius:10px;font-size:13px;font-weight:600;color:#fff;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.15);animation:slideIn .35s ease;display:none}
-  .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.8);display:none;align-items:center;justify-content:center;z-index:999}.spinner{width:40px;height:40px;border:4px solid #e3e6eb;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
-  @keyframes slideIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes spin{to{transform:rotate(360deg)}}.anim{animation:fadeUp .35s ease}
+:root{--bg:#f0f2f5;--sidebar:#0c1222;--card:#fff;--border:#e3e6eb;--text:#0f172a;--text-sec:#5a6577;--text-muted:#8e99a9;--accent:#2563eb;--accent-light:#dbeafe;--accent-dark:#1d4ed8;--success:#059669;--danger:#dc2626;--danger-light:#fee2e2;--warning:#d97706}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:#c8cdd4;border-radius:10px}
+input,select,textarea{font-family:inherit}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)!important;box-shadow:0 0 0 3px rgba(37,99,235,.1)!important}
+.login-screen{display:flex;align-items:center;justify-content:center;height:100vh;background:linear-gradient(135deg,#0c1222,#1e3a5f)}
+.login-card{background:#fff;border-radius:20px;padding:44px 38px;width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo-img{display:block;margin:0 auto 20px;width:80px}
+.login-title{text-align:center;font-size:20px;font-weight:800;margin-bottom:4px}.login-sub{text-align:center;font-size:13px;color:var(--text-sec);margin-bottom:24px}
+.login-input{width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:12px;background:#f8f9fb}
+.login-btn{width:100%;padding:13px;background:#c0392b;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}.login-btn:hover{background:#a93226}
+.login-toggle{text-align:center;margin-top:18px;font-size:13px;color:var(--text-sec)}.login-toggle a{color:var(--accent);cursor:pointer;font-weight:600;text-decoration:none}
+.login-error{background:var(--danger-light);color:var(--danger);padding:10px 14px;border-radius:8px;font-size:13px;margin-bottom:12px;display:none}
+.app{display:none;height:100vh;overflow:hidden}
+.sidebar{width:240px;min-width:240px;background:var(--sidebar);display:flex;flex-direction:column}
+.sidebar-header{padding:20px 16px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:12px}
+.sidebar-header img{width:36px;border-radius:8px}
+.sidebar-title{color:#f1f5f9;font-size:15px;font-weight:700}.sidebar-sub{color:#5a6577;font-size:10px;margin-top:1px}
+.sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto;display:flex;flex-direction:column;gap:1px}
+.nav-label{font-size:9px;font-weight:700;color:#4a5568;text-transform:uppercase;letter-spacing:.08em;padding:14px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:all .2s;color:#8e99a9;font-size:13px;font-weight:500;user-select:none}
+.nav-item:hover{background:rgba(96,165,250,.08);color:#bcc5d3}.nav-item.active{background:rgba(96,165,250,.14);color:#60a5fa;font-weight:600}
+.nav-icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sidebar-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.06)}.sidebar-footer-info{font-size:11px;color:#4a5568;margin-bottom:6px}
+.logout-btn{width:100%;padding:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#8e99a9;font-size:11px;cursor:pointer;font-family:inherit;font-weight:600}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--card);padding:14px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}.topbar h1{font-size:17px;font-weight:700}
+.content{flex:1;overflow-y:auto;padding:24px 28px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-dark)}
+.btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+.btn-success{background:var(--success);color:#fff}
+.btn-danger{background:var(--danger-light);color:var(--danger);border:1px solid #fecaca}
+.btn-red{background:#c0392b;color:#fff}.btn-red:hover{background:#a93226}
+.btn-sm{padding:6px 12px;font-size:12px}.btn-lg{padding:12px 24px;font-size:15px;font-weight:700}
+.search-input{padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#f8f9fb;width:260px}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:22px;margin-bottom:12px}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.stat-card{background:var(--card);border-radius:14px;padding:20px;border:1px solid var(--border)}.stat-label{font-size:11px;color:var(--text-muted);font-weight:600;margin-bottom:6px}.stat-value{font-size:30px;font-weight:800}
+.table-wrap{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse}thead th{padding:12px 16px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;border-bottom:2px solid var(--border);background:#f8f9fb}
+tbody td{padding:12px 16px;font-size:13px;color:var(--text-sec);border-bottom:1px solid #f4f5f7}tbody tr{cursor:pointer;transition:background .15s}tbody tr:hover{background:#f8f9fb}
+.avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.avatar-lg{width:52px;height:52px;font-size:18px;border-radius:14px}
+.badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:6px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 12px}.form-grid .full{grid-column:1/-1}
+.form-group label{display:block;font-size:10px;font-weight:600;color:var(--text-sec);margin-bottom:3px;text-transform:uppercase}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:#f8f9fb}.form-group .filled{border-color:#93c5fd;background:rgba(37,99,235,.03)}.form-group textarea{resize:vertical;min-height:60px}
+.upload-zone{border:2px dashed #c8cdd4;border-radius:14px;padding:40px 20px;text-align:center;cursor:pointer;background:#fafbfc}.upload-zone:hover{border-color:var(--accent)}
+.check-card{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;border:2px solid var(--border);cursor:pointer}.check-card.selected{border-color:var(--accent);background:rgba(37,99,235,.03)}
+.check-box{width:18px;height:18px;border-radius:6px;border:2px solid #c8cdd4;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}.check-card.selected .check-box{background:var(--accent);border-color:var(--accent)}
+.section-label{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px 18px}.detail-label{font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:2px}.detail-value{font-size:13px;font-weight:500}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.action-card{background:var(--card);border-radius:14px;padding:22px;border:1px solid var(--border);cursor:pointer;transition:all .2s}.action-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.result-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:8px}
+.img-preview{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--border)}.img-preview img{width:100%;max-height:350px;object-fit:contain;background:#f4f5f7;display:block}
+.img-close{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:7px;background:rgba(0,0,0,.55);color:#fff;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.photo-upload{width:110px;height:130px;border-radius:12px;border:2px dashed #c8cdd4;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:#f8f9fb;flex-shrink:0}.photo-upload:hover{border-color:var(--accent)}.photo-upload img{width:100%;height:100%;object-fit:cover}
+.empty{text-align:center;padding:50px 20px;color:var(--text-muted)}
+.toast{position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:10px;font-size:13px;font-weight:600;color:#fff;z-index:9999;box-shadow:0 8px 30px rgba(0,0,0,.15);animation:slideIn .35s ease;display:none}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.8);display:none;align-items:center;justify-content:center;z-index:999}.spinner{width:36px;height:36px;border:4px solid #e3e6eb;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+.doc-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px}.doc-card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.doc-icon{font-size:22px;flex-shrink:0;width:36px;text-align:center}
+.doc-title{font-size:12px;font-weight:700;color:var(--text)}.doc-cat{font-size:10px;color:var(--text-muted)}
+@keyframes slideIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@keyframes spin{to{transform:rotate(360deg)}}.anim{animation:fadeUp .35s ease}
 </style>
 </head>
 <body>
 <div class="login-screen" id="loginScreen">
-  <div class="login-card"><div class="login-logo">RH</div>
+  <div class="login-card">
+    <img src="/logo.jpg" class="login-logo-img" alt="Villas Garden">
     <div class="login-title" id="authTitle">Entrar no Sistema</div>
-    <div class="login-sub" id="authSub">Faça login para acessar o Sistema RH</div>
+    <div class="login-sub" id="authSub">Sistema RH — Padaria e Confeitaria Villas Garden</div>
     <div class="login-error" id="authError"></div>
     <div id="authFields"><input class="login-input" id="authUser" placeholder="Usuário"><input class="login-input" id="authPass" type="password" placeholder="Senha"></div>
-    <button class="login-btn" id="authBtn" onclick="handleAuth()">Entrar</button>
+    <button class="login-btn" onclick="handleAuth()">Entrar</button>
     <div class="login-toggle" id="authToggle">Não tem conta? <a onclick="toggleAuthMode()">Criar conta</a></div>
   </div>
 </div>
 <div class="app" id="app">
   <div class="sidebar">
-    <div class="sidebar-header"><div class="sidebar-brand"><div class="sidebar-logo">RH</div><div><div class="sidebar-title">Sistema RH</div><div class="sidebar-sub">Gestão de Funcionários</div></div></div></div>
+    <div class="sidebar-header"><img src="/logo.jpg" alt="VG"><div><div class="sidebar-title">Villas Garden</div><div class="sidebar-sub">Sistema RH</div></div></div>
     <nav class="sidebar-nav">
       <div class="nav-label">Principal</div>
       <div class="nav-item active" data-view="dashboard" onclick="goTo('dashboard')"><span class="nav-icon">◉</span> Painel</div>
@@ -88,333 +93,177 @@
       <div class="nav-label">Ferramentas</div>
       <div class="nav-item" data-view="add" onclick="goTo('add')"><span class="nav-icon">+</span> Novo Cadastro</div>
       <div class="nav-item" data-view="ocr" onclick="goTo('ocr')"><span class="nav-icon">⎘</span> Importar Ficha</div>
-      <div class="nav-item" data-view="form-filler" onclick="goTo('form-filler')"><span class="nav-icon">✎</span> Preencher Formulário</div>
+      <div class="nav-item" data-view="docs" onclick="goTo('docs')"><span class="nav-icon">📄</span> Documentos</div>
     </nav>
-    <div class="sidebar-footer"><div class="sidebar-footer-info">Olá, <strong id="userName"></strong></div><div class="sidebar-footer-info" id="empCounter">0 funcionários</div><button class="logout-btn" onclick="logout()" style="margin-top:10px">Sair da conta</button></div>
+    <div class="sidebar-footer"><div class="sidebar-footer-info">Olá, <strong id="userName"></strong></div><div class="sidebar-footer-info" id="empCounter">0 funcionários</div><button class="logout-btn" onclick="logout()" style="margin-top:8px">Sair</button></div>
   </div>
   <div class="main"><div class="topbar"><h1 id="pageTitle">Painel</h1><div class="topbar-actions" id="topbarActions"></div></div><div class="content" id="content"></div></div>
 </div>
-<div class="toast" id="toast"></div>
-<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+<div class="toast" id="toast"></div><div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
 <input type="file" id="fileInput" accept="image/*" style="display:none">
-<input type="file" id="formFileInput" accept="image/*,.pdf,.doc,.docx" style="display:none">
 <input type="file" id="photoInput" accept="image/*" style="display:none">
-
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-var SECTIONS=[
-  {section:"Dados Pessoais",fields:[{key:"nome",label:"Nome Completo",full:true},{key:"cpf",label:"CPF"},{key:"rg",label:"RG"},{key:"orgaoEmissor",label:"Órgão Emissor"},{key:"dataNascimento",label:"Data Nascimento"},{key:"sexo",label:"Sexo",options:["Masculino","Feminino","Outro"]},{key:"estadoCivil",label:"Estado Civil",options:["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União Estável"]},{key:"nacionalidade",label:"Nacionalidade"},{key:"naturalidade",label:"Naturalidade"},{key:"nomeMae",label:"Nome da Mãe",full:true},{key:"nomePai",label:"Nome do Pai",full:true}]},
-  {section:"Endereço",fields:[{key:"endereco",label:"Logradouro",full:true},{key:"numero",label:"Número"},{key:"complemento",label:"Complemento"},{key:"bairro",label:"Bairro"},{key:"cidade",label:"Cidade"},{key:"estado",label:"UF"},{key:"cep",label:"CEP"}]},
-  {section:"Contato",fields:[{key:"telefone",label:"Telefone"},{key:"celular",label:"Celular"},{key:"email",label:"E-mail",full:true}]},
-  {section:"Documentos",fields:[{key:"ctpsNumero",label:"CTPS Nº"},{key:"ctpsSerie",label:"Série"},{key:"ctpsUf",label:"UF"},{key:"pisPasep",label:"PIS/PASEP"},{key:"tituloEleitor",label:"Título Eleitor"},{key:"zonaEleitoral",label:"Zona"},{key:"secaoEleitoral",label:"Seção"},{key:"reservista",label:"Reservista"},{key:"cnhNumero",label:"CNH Nº"},{key:"cnhCategoria",label:"CNH Cat."},{key:"cnhValidade",label:"CNH Val."}]},
-  {section:"Profissional",fields:[{key:"cargo",label:"Cargo"},{key:"departamento",label:"Departamento"},{key:"dataAdmissao",label:"Admissão"},{key:"salario",label:"Salário"},{key:"tipoContrato",label:"Contrato",options:["CLT","PJ","Temporário","Estágio","Menor Aprendiz"]},{key:"jornadaTrabalho",label:"Jornada"},{key:"escolaridade",label:"Escolaridade",options:["Fund. Incompleto","Fund. Completo","Médio Incompleto","Médio Completo","Sup. Incompleto","Sup. Completo","Pós-Graduação","Mestrado","Doutorado"]}]},
-  {section:"Bancário",fields:[{key:"banco",label:"Banco"},{key:"agencia",label:"Agência"},{key:"conta",label:"Conta"},{key:"tipoConta",label:"Tipo",options:["Corrente","Poupança"]},{key:"chavePix",label:"PIX",full:true}]},
-  {section:"Saúde",fields:[{key:"tipoSanguineo",label:"Sangue",options:["A+","A-","B+","B-","AB+","AB-","O+","O-"]},{key:"alergias",label:"Alergias",full:true},{key:"contatoEmergencia",label:"Contato Emergência",full:true},{key:"telEmergencia",label:"Tel. Emergência"}]},
-  {section:"Dependentes",fields:[{key:"dependentes",label:"Dependentes",full:true,multiline:true}]}
-];
+var SECTIONS=[{section:"Dados Pessoais",fields:[{key:"nome",label:"Nome Completo",full:true},{key:"cpf",label:"CPF"},{key:"rg",label:"RG"},{key:"orgaoEmissor",label:"Órgão Emissor"},{key:"dataNascimento",label:"Data Nascimento"},{key:"sexo",label:"Sexo",options:["Masculino","Feminino","Outro"]},{key:"estadoCivil",label:"Estado Civil",options:["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União Estável"]},{key:"nacionalidade",label:"Nacionalidade"},{key:"naturalidade",label:"Naturalidade"},{key:"nomeMae",label:"Nome da Mãe",full:true},{key:"nomePai",label:"Nome do Pai",full:true}]},{section:"Endereço",fields:[{key:"endereco",label:"Logradouro",full:true},{key:"numero",label:"Número"},{key:"complemento",label:"Complemento"},{key:"bairro",label:"Bairro"},{key:"cidade",label:"Cidade"},{key:"estado",label:"UF"},{key:"cep",label:"CEP"}]},{section:"Contato",fields:[{key:"telefone",label:"Telefone"},{key:"celular",label:"Celular"},{key:"email",label:"E-mail",full:true}]},{section:"Documentos",fields:[{key:"ctpsNumero",label:"CTPS Nº"},{key:"ctpsSerie",label:"Série"},{key:"ctpsUf",label:"UF"},{key:"pisPasep",label:"PIS/PASEP"},{key:"tituloEleitor",label:"Título Eleitor"},{key:"zonaEleitoral",label:"Zona"},{key:"secaoEleitoral",label:"Seção"},{key:"reservista",label:"Reservista"},{key:"cnhNumero",label:"CNH Nº"},{key:"cnhCategoria",label:"Categoria"},{key:"cnhValidade",label:"Validade"}]},{section:"Profissional",fields:[{key:"cargo",label:"Cargo"},{key:"departamento",label:"Departamento"},{key:"dataAdmissao",label:"Admissão"},{key:"salario",label:"Salário"},{key:"tipoContrato",label:"Contrato",options:["CLT","PJ","Temporário","Estágio","Menor Aprendiz"]},{key:"jornadaTrabalho",label:"Jornada"},{key:"escolaridade",label:"Escolaridade",options:["Fund. Incompleto","Fund. Completo","Médio Incompleto","Médio Completo","Sup. Incompleto","Sup. Completo","Pós-Graduação","Mestrado","Doutorado"]}]},{section:"Bancário",fields:[{key:"banco",label:"Banco"},{key:"agencia",label:"Agência"},{key:"conta",label:"Conta"},{key:"tipoConta",label:"Tipo",options:["Corrente","Poupança"]},{key:"chavePix",label:"PIX",full:true}]},{section:"Saúde",fields:[{key:"tipoSanguineo",label:"Sangue",options:["A+","A-","B+","B-","AB+","AB-","O+","O-"]},{key:"alergias",label:"Alergias",full:true},{key:"contatoEmergencia",label:"Contato Emergência",full:true},{key:"telEmergencia",label:"Tel. Emergência"}]},{section:"Dependentes",fields:[{key:"dependentes",label:"Dependentes",full:true,multiline:true}]}];
 var ALL_KEYS=SECTIONS.flatMap(function(s){return s.fields.map(function(f){return f.key})});
-
 function emptyEmp(){var o={};ALL_KEYS.forEach(function(k){o[k]=""});o.photo="";return o}
 function ini(n){return(n||"?").split(" ").slice(0,2).map(function(w){return(w[0]||"").toUpperCase()}).join("")}
-function avt(e,c){
-  if(e.photo) return '<div class="avatar '+(c||"")+'" style="background:#eee"><img src="'+e.photo+'"></div>';
-  return '<div class="avatar '+(c||"")+'" style="background:#dbeafe;color:var(--accent)">'+ini(e.nome)+'</div>';
-}
+function avt(e,c){return e.photo?'<div class="avatar '+(c||"")+'" style="background:#eee"><img src="'+e.photo+'"></div>':'<div class="avatar '+(c||"")+'" style="background:#dbeafe;color:var(--accent)">'+ini(e.nome)+"</div>"}
 
-var employees=[], currentView="dashboard", editData=emptyEmp(), selectedId=null, authMode="login";
-var ocrImageData=null, ocrImageType="";
-var formFileType="", formImageB64="", formImageMime="", formPdfB64="", formDocxB64="", formPreviewUrl="";
-var formFields=null, formSelectedEmps=[], formResult=null;
+var employees=[],templates=[],currentView="dashboard",editData=emptyEmp(),selectedId=null,authMode="login";
+var ocrImageData=null,ocrImageType="";
+var docSelectedTemplate=null,docSelectedEmpId=null,docCustom={};
 
-function api(url, opts){
-  opts = opts || {};
-  var fetchOpts = {headers:{"Content-Type":"application/json"}};
-  if(opts.method) fetchOpts.method = opts.method;
-  if(opts.body) fetchOpts.body = JSON.stringify(opts.body);
-  return fetch(url, fetchOpts).then(function(r){
-    return r.json().then(function(d){
-      if(!r.ok) throw new Error(d.error||"Erro");
-      return d;
-    });
-  });
-}
+function api(u,o){o=o||{};return fetch(u,{headers:{"Content-Type":"application/json"},method:o.method,body:o.body?JSON.stringify(o.body):undefined}).then(function(r){return r.json().then(function(d){if(!r.ok)throw new Error(d.error||"Erro");return d})})}
 function toast(m,t){var e=document.getElementById("toast");e.textContent=m;e.style.background=t==="error"?"#dc2626":"#059669";e.style.display="block";setTimeout(function(){e.style.display="none"},3000)}
 function loading(v){document.getElementById("loadingOverlay").style.display=v?"flex":"none"}
 
 // AUTH
-function toggleAuthMode(){
-  authMode = authMode==="login" ? "register" : "login";
-  document.getElementById("authTitle").textContent = authMode==="login" ? "Entrar no Sistema" : "Criar Conta";
-  document.getElementById("authSub").textContent = authMode==="login" ? "Faça login" : "Crie sua conta";
-  document.getElementById("authBtn").textContent = authMode==="login" ? "Entrar" : "Criar Conta";
-  if(authMode==="register"){
-    document.getElementById("authFields").innerHTML = '<input class="login-input" id="authName" placeholder="Seu nome"><input class="login-input" id="authUser" placeholder="Usuário"><input class="login-input" id="authPass" type="password" placeholder="Senha">';
-    document.getElementById("authToggle").innerHTML = 'Já tem conta? <a onclick="toggleAuthMode()">Login</a>';
-  } else {
-    document.getElementById("authFields").innerHTML = '<input class="login-input" id="authUser" placeholder="Usuário"><input class="login-input" id="authPass" type="password" placeholder="Senha">';
-    document.getElementById("authToggle").innerHTML = 'Não tem conta? <a onclick="toggleAuthMode()">Criar conta</a>';
-  }
-  document.getElementById("authError").style.display="none";
-}
-
-function handleAuth(){
-  var err=document.getElementById("authError"); err.style.display="none";
-  var u=document.getElementById("authUser") ? document.getElementById("authUser").value.trim() : "";
-  var p=document.getElementById("authPass") ? document.getElementById("authPass").value : "";
-  var n=document.getElementById("authName") ? document.getElementById("authName").value.trim() : "";
-  if(authMode==="register" && !n){err.textContent="Preencha nome";err.style.display="block";return}
-  if(!u||!p){err.textContent="Preencha tudo";err.style.display="block";return}
-  loading(true);
-  var url = authMode==="login" ? "/api/login" : "/api/register";
-  var body = authMode==="login" ? {username:u,password:p} : {username:u,password:p,name:n};
-  api(url,{method:"POST",body:body}).then(function(d){enterApp(d.name)}).catch(function(e){err.textContent=e.message;err.style.display="block"}).finally(function(){loading(false)});
-}
-
+function toggleAuthMode(){authMode=authMode==="login"?"register":"login";document.getElementById("authTitle").textContent=authMode==="login"?"Entrar no Sistema":"Criar Conta";document.getElementById("authSub").textContent=authMode==="login"?"Sistema RH — Villas Garden":"Crie sua conta";if(authMode==="register"){document.getElementById("authFields").innerHTML='<input class="login-input" id="authName" placeholder="Seu nome"><input class="login-input" id="authUser" placeholder="Usuário"><input class="login-input" id="authPass" type="password" placeholder="Senha">';document.getElementById("authToggle").innerHTML='Já tem conta? <a onclick="toggleAuthMode()">Login</a>'}else{document.getElementById("authFields").innerHTML='<input class="login-input" id="authUser" placeholder="Usuário"><input class="login-input" id="authPass" type="password" placeholder="Senha">';document.getElementById("authToggle").innerHTML='Não tem conta? <a onclick="toggleAuthMode()">Criar conta</a>'}document.getElementById("authError").style.display="none"}
+function handleAuth(){var err=document.getElementById("authError");err.style.display="none";var u=document.getElementById("authUser")?document.getElementById("authUser").value.trim():"";var p=document.getElementById("authPass")?document.getElementById("authPass").value:"";var n=document.getElementById("authName")?document.getElementById("authName").value.trim():"";if(authMode==="register"&&!n){err.textContent="Preencha nome";err.style.display="block";return}if(!u||!p){err.textContent="Preencha tudo";err.style.display="block";return}loading(true);api(authMode==="login"?"/api/login":"/api/register",{method:"POST",body:authMode==="login"?{username:u,password:p}:{username:u,password:p,name:n}}).then(function(d){enterApp(d.name)}).catch(function(e){err.textContent=e.message;err.style.display="block"}).finally(function(){loading(false)})}
 function checkAuth(){api("/api/me").then(function(d){if(d.logged)enterApp(d.name)}).catch(function(){})}
-function enterApp(name){document.getElementById("loginScreen").style.display="none";document.getElementById("app").style.display="flex";document.getElementById("userName").textContent=name;loadEmps().then(function(){render()})}
+function enterApp(name){document.getElementById("loginScreen").style.display="none";document.getElementById("app").style.display="flex";document.getElementById("userName").textContent=name;Promise.all([loadEmps(),loadTemplates()]).then(function(){render()})}
 function logout(){api("/api/logout",{method:"POST"}).catch(function(){}).finally(function(){document.getElementById("loginScreen").style.display="flex";document.getElementById("app").style.display="none";employees=[]})}
-
 function loadEmps(){return api("/api/employees").then(function(d){employees=d}).catch(function(){employees=[]}).finally(function(){updCount()})}
+function loadTemplates(){return api("/api/templates").then(function(d){templates=d}).catch(function(){templates=[]})}
 function updCount(){var c=employees.length;document.getElementById("empCounter").textContent=c+" funcionário"+(c!==1?"s":"")}
+function saveEmp(){if(!editData.nome||!editData.nome.trim()){toast("Nome obrigatório","error");return}loading(true);var p=editData.id?api("/api/employees/"+editData.id,{method:"PUT",body:editData}):api("/api/employees",{method:"POST",body:editData});p.then(function(){return loadEmps()}).then(function(){toast(editData.id?"Atualizado!":"Cadastrado!");goTo("list")}).catch(function(e){toast(e.message,"error")}).finally(function(){loading(false)})}
+function delEmp(id){if(!confirm("Excluir?"))return;loading(true);api("/api/employees/"+id,{method:"DELETE"}).then(function(){return loadEmps()}).then(function(){toast("Excluído");goTo("list")}).catch(function(e){toast(e.message,"error")}).finally(function(){loading(false)})}
 
-function saveEmp(){
-  if(!editData.nome || !editData.nome.trim()){toast("Nome obrigatório","error");return}
-  loading(true);
-  var promise;
-  if(editData.id){promise=api("/api/employees/"+editData.id,{method:"PUT",body:editData})}
-  else{promise=api("/api/employees",{method:"POST",body:editData})}
-  promise.then(function(){return loadEmps()}).then(function(){toast(editData.id?"Atualizado!":"Cadastrado!");goTo("list")}).catch(function(e){toast(e.message,"error")}).finally(function(){loading(false)});
-}
-
-function delEmp(id){
-  if(!confirm("Excluir este funcionário?"))return;
-  loading(true);
-  api("/api/employees/"+id,{method:"DELETE"}).then(function(){return loadEmps()}).then(function(){toast("Excluído");goTo("list")}).catch(function(e){toast(e.message,"error")}).finally(function(){loading(false)});
-}
-
-function goTo(v,id){
-  currentView=v; selectedId=id||null;
-  if(v==="add") editData=emptyEmp();
-  if(v==="edit" && id){var e=employees.find(function(x){return x.id==id});if(e)editData=JSON.parse(JSON.stringify(e))}
-  if(v==="ocr") ocrImageData=null;
-  if(v==="form-filler"){formFileType="";formImageB64="";formPdfB64="";formDocxB64="";formPreviewUrl="";formFields=null;formSelectedEmps=[];formResult=null}
-  render();
-}
+function goTo(v,id){currentView=v;selectedId=id||null;if(v==="add")editData=emptyEmp();if(v==="edit"&&id){var e=employees.find(function(x){return x.id==id});if(e)editData=JSON.parse(JSON.stringify(e))}if(v==="ocr")ocrImageData=null;if(v==="docs"){docSelectedTemplate=null;docSelectedEmpId=null;docCustom={}}render()}
 
 function render(){
-  document.querySelectorAll(".nav-item").forEach(function(n){var v=n.dataset.view;n.classList.toggle("active",v===currentView||(v==="list"&&(currentView==="detail"||currentView==="edit")))});
-  var titles={dashboard:"Painel",list:"Funcionários",add:"Novo Cadastro",edit:"Editar",detail:"Detalhes",ocr:"Importar Ficha","form-filler":"Preencher Formulário"};
-  document.getElementById("pageTitle").textContent=titles[currentView]||"RH";
+  document.querySelectorAll(".nav-item").forEach(function(n){var v=n.dataset.view;n.classList.toggle("active",v===currentView||(v==="list"&&(currentView==="detail"||currentView==="edit"))||(v==="docs"&&currentView==="doc-fill"))});
+  var t={dashboard:"Painel",list:"Funcionários",add:"Novo Cadastro",edit:"Editar",detail:"Detalhes",ocr:"Importar Ficha",docs:"Documentos","doc-fill":"Preencher Documento"};
+  document.getElementById("pageTitle").textContent=t[currentView]||"RH";
   var ta=document.getElementById("topbarActions");
-  if(currentView==="list"||currentView==="dashboard"){ta.innerHTML='<input class="search-input" placeholder="Buscar..." oninput="handleSearch(this.value)"><button class="btn btn-primary" onclick="goTo(\'add\')">+ Novo</button>'}else{ta.innerHTML=""}
+  ta.innerHTML=(currentView==="list"||currentView==="dashboard")?'<input class="search-input" placeholder="Buscar..." oninput="handleSearch(this.value)"><button class="btn btn-primary" onclick="goTo(\'add\')">+ Novo</button>':"";
   var el=document.getElementById("content");
-  if(currentView==="dashboard") renderDash(el);
-  else if(currentView==="list") renderList(el,"");
-  else if(currentView==="add"||currentView==="edit") renderForm(el);
-  else if(currentView==="detail") renderDetail(el);
-  else if(currentView==="ocr") renderOCR(el);
-  else if(currentView==="form-filler") renderFiller(el);
+  if(currentView==="dashboard")renderDash(el);
+  else if(currentView==="list")renderList(el,"");
+  else if(currentView==="add"||currentView==="edit")renderForm(el);
+  else if(currentView==="detail")renderDetail(el);
+  else if(currentView==="ocr")renderOCR(el);
+  else if(currentView==="docs")renderDocs(el);
+  else if(currentView==="doc-fill")renderDocFill(el);
   updCount();
 }
-
 function handleSearch(v){if(currentView==="dashboard")currentView="list";renderList(document.getElementById("content"),v)}
 
+// ── DASHBOARD ──
 function renderDash(el){
   var e=employees,clt=e.filter(function(x){return x.tipoContrato==="CLT"}).length,pj=e.filter(function(x){return x.tipoContrato==="PJ"}).length;
-  var h='<div class="anim"><div class="stats-grid"><div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="color:var(--accent)">'+e.length+'</div></div><div class="stat-card"><div class="stat-label">CLT</div><div class="stat-value" style="color:var(--success)">'+clt+'</div></div><div class="stat-card"><div class="stat-label">PJ</div><div class="stat-value" style="color:var(--warning)">'+pj+'</div></div></div>';
-  h+='<div class="action-grid"><div class="action-card" onclick="goTo(\'ocr\')"><div style="font-size:26px;margin-bottom:10px">📄</div><div style="font-size:15px;font-weight:700;margin-bottom:4px">Importar Ficha</div><div style="font-size:12.5px;color:var(--text-muted)">Foto ou print — IA extrai tudo</div></div><div class="action-card" onclick="goTo(\'form-filler\')"><div style="font-size:26px;margin-bottom:10px">📋</div><div style="font-size:15px;font-weight:700;margin-bottom:4px">Preencher Formulário</div><div style="font-size:12.5px;color:var(--text-muted)">PDF, Word ou imagem</div></div></div>';
-  if(e.length){h+='<div style="margin-top:24px"><h3 style="font-size:15px;font-weight:700;margin-bottom:14px">Últimos cadastros</h3>';e.slice(0,5).forEach(function(x){h+='<div class="result-row" onclick="goTo(\'detail\',\''+x.id+'\')" style="cursor:pointer"><div style="display:flex;align-items:center;gap:12px">'+avt(x)+'<div><div style="font-weight:600;font-size:13px">'+x.nome+'</div><div style="font-size:12px;color:var(--text-muted)">'+(x.cargo||"")+" "+(x.cpf?"· "+x.cpf:"")+'</div></div></div></div>'});h+="</div>"}
+  var h='<div class="anim"><div class="stats-grid"><div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" style="color:var(--accent)">'+e.length+'</div></div><div class="stat-card"><div class="stat-label">CLT</div><div class="stat-value" style="color:var(--success)">'+clt+'</div></div><div class="stat-card"><div class="stat-label">PJ</div><div class="stat-value" style="color:var(--warning)">'+pj+'</div></div><div class="stat-card"><div class="stat-label">Documentos</div><div class="stat-value" style="color:#c0392b">'+templates.length+'</div></div></div>';
+  h+='<div class="action-grid"><div class="action-card" onclick="goTo(\'ocr\')"><div style="font-size:24px;margin-bottom:8px">📄</div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Importar Ficha</div><div style="font-size:12px;color:var(--text-muted)">IA lê a ficha e cadastra</div></div><div class="action-card" onclick="goTo(\'docs\')"><div style="font-size:24px;margin-bottom:8px">📋</div><div style="font-size:14px;font-weight:700;margin-bottom:3px">Documentos</div><div style="font-size:12px;color:var(--text-muted)">26 modelos prontos com logo</div></div></div>';
+  if(e.length){h+='<div style="margin-top:20px"><h3 style="font-size:14px;font-weight:700;margin-bottom:12px">Últimos cadastros</h3>';e.slice(0,5).forEach(function(x){h+='<div class="result-row" onclick="goTo(\'detail\',\''+x.id+'\')" style="cursor:pointer"><div style="display:flex;align-items:center;gap:10px">'+avt(x)+'<div><div style="font-weight:600;font-size:13px">'+x.nome+'</div><div style="font-size:11px;color:var(--text-muted)">'+(x.cargo||"")+(x.cpf?" · "+x.cpf:"")+'</div></div></div></div>'});h+="</div>"}
   el.innerHTML=h+"</div>";
 }
 
-function renderList(el,search){
-  var s=(search||"").toLowerCase();
-  var f=employees.filter(function(e){return !s||e.nome&&e.nome.toLowerCase().indexOf(s)>=0||e.cpf&&e.cpf.indexOf(s)>=0||e.cargo&&e.cargo.toLowerCase().indexOf(s)>=0});
-  if(!f.length){el.innerHTML='<div class="anim empty"><div style="font-size:44px;opacity:.6;margin-bottom:14px">☰</div><div style="font-size:15px;font-weight:600">'+(employees.length?"Nenhum resultado":"Nenhum funcionário")+"</div></div>";return}
-  var h='<div class="anim table-wrap"><table><thead><tr><th>Funcionário</th><th>CPF</th><th>Cargo</th><th>Admissão</th><th>Contrato</th><th></th></tr></thead><tbody>';
-  f.forEach(function(e){
-    var bc=e.tipoContrato==="CLT"?"background:#d1fae5;color:#166534":e.tipoContrato==="PJ"?"background:#fef3c7;color:#854d0e":"background:#f1f5f9;color:#475569";
-    h+='<tr onclick="goTo(\'detail\',\''+e.id+'\')"><td><div style="display:flex;align-items:center;gap:10px">'+avt(e)+'<div><div style="font-weight:600;color:var(--text)">'+e.nome+'</div><div style="font-size:11px;color:var(--text-muted)">'+(e.email||"")+'</div></div></div></td><td>'+(e.cpf||"—")+'</td><td>'+(e.cargo||"—")+'</td><td>'+(e.dataAdmissao||"—")+'</td><td>'+(e.tipoContrato?'<span class="badge" style="'+bc+'">'+e.tipoContrato+"</span>":"—")+'</td><td style="text-align:right;color:var(--text-muted)">›</td></tr>'
-  });
-  el.innerHTML=h+"</tbody></table></div>";
-}
+// ── LIST ──
+function renderList(el,s){s=(s||"").toLowerCase();var f=employees.filter(function(e){return!s||(e.nome&&e.nome.toLowerCase().indexOf(s)>=0)||(e.cpf&&e.cpf.indexOf(s)>=0)||(e.cargo&&e.cargo.toLowerCase().indexOf(s)>=0)});if(!f.length){el.innerHTML='<div class="anim empty"><div style="font-size:40px;opacity:.6;margin-bottom:12px">☰</div><div style="font-size:14px;font-weight:600">'+(employees.length?"Nenhum resultado":"Nenhum funcionário")+"</div></div>";return}var h='<div class="anim table-wrap"><table><thead><tr><th>Funcionário</th><th>CPF</th><th>Cargo</th><th>Contrato</th><th></th></tr></thead><tbody>';f.forEach(function(e){var bc=e.tipoContrato==="CLT"?"background:#d1fae5;color:#166534":e.tipoContrato==="PJ"?"background:#fef3c7;color:#854d0e":"background:#f1f5f9;color:#475569";h+='<tr onclick="goTo(\'detail\',\''+e.id+'\')"><td><div style="display:flex;align-items:center;gap:10px">'+avt(e)+'<div><div style="font-weight:600;color:var(--text)">'+e.nome+'</div></div></div></td><td>'+(e.cpf||"—")+'</td><td>'+(e.cargo||"—")+'</td><td>'+(e.tipoContrato?'<span class="badge" style="'+bc+'">'+e.tipoContrato+"</span>":"—")+"</td><td>›</td></tr>"});el.innerHTML=h+"</tbody></table></div>"}
 
-function renderDetail(el){
-  var e=employees.find(function(x){return x.id==selectedId});if(!e)return;
-  var h='<div class="anim"><div style="display:flex;gap:10px;margin-bottom:20px"><button class="btn btn-secondary" onclick="goTo(\'list\')">← Voltar</button><button class="btn btn-primary" onclick="goTo(\'edit\',\''+e.id+'\')">Editar</button><button class="btn btn-danger" onclick="delEmp(\''+e.id+'\')">Excluir</button></div>';
-  h+='<div class="card"><div style="display:flex;align-items:center;gap:18px">'+avt(e,"avatar-lg")+'<div><h2 style="font-size:20px;font-weight:800">'+e.nome+'</h2><div style="font-size:13px;color:var(--text-sec);margin-top:3px">'+(e.cargo||"")+" "+(e.departamento?"· "+e.departamento:"")+"</div></div></div></div>";
-  SECTIONS.forEach(function(s){
-    if(!s.fields.some(function(f){return e[f.key]}))return;
-    h+='<div class="card"><div class="section-label">'+s.section+'</div><div class="detail-grid">';
-    s.fields.filter(function(f){return e[f.key]}).forEach(function(f){h+='<div '+(f.full?'style="grid-column:1/-1"':"")+'><div class="detail-label">'+f.label+'</div><div class="detail-value">'+e[f.key]+"</div></div>"});
+// ── DETAIL ──
+function renderDetail(el){var e=employees.find(function(x){return x.id==selectedId});if(!e)return;var h='<div class="anim"><div style="display:flex;gap:8px;margin-bottom:18px"><button class="btn btn-secondary" onclick="goTo(\'list\')">← Voltar</button><button class="btn btn-primary" onclick="goTo(\'edit\',\''+e.id+'\')">Editar</button><button class="btn btn-danger" onclick="delEmp(\''+e.id+'\')">Excluir</button></div><div class="card"><div style="display:flex;align-items:center;gap:16px">'+avt(e,"avatar-lg")+'<div><h2 style="font-size:18px;font-weight:800">'+e.nome+'</h2><div style="font-size:13px;color:var(--text-sec)">'+(e.cargo||"")+(e.departamento?" · "+e.departamento:"")+"</div></div></div></div>";SECTIONS.forEach(function(s){if(!s.fields.some(function(f){return e[f.key]}))return;h+='<div class="card"><div class="section-label">'+s.section+'</div><div class="detail-grid">';s.fields.filter(function(f){return e[f.key]}).forEach(function(f){h+='<div '+(f.full?'style="grid-column:1/-1"':"")+'><div class="detail-label">'+f.label+'</div><div class="detail-value">'+e[f.key]+"</div></div>"});h+="</div></div>"});el.innerHTML=h+"</div>"}
+
+// ── ADD/EDIT ──
+function renderForm(el){var h='<div class="anim"><div style="display:flex;gap:8px;margin-bottom:18px"><button class="btn btn-secondary" onclick="goTo(\'list\')">← Voltar</button><button class="btn btn-success btn-lg" onclick="saveEmp()">Salvar</button></div><div class="card"><div class="section-label">Foto</div><div style="display:flex;align-items:center;gap:18px"><div class="photo-upload" onclick="pickPhoto()">'+(editData.photo?'<img src="'+editData.photo+'">':'<div style="font-size:10px;color:var(--text-muted);text-align:center">📷 Foto</div>')+'</div><div style="font-size:12px;color:var(--text-sec)">'+(editData.photo?'<button class="btn btn-sm btn-danger" onclick="editData.photo=\'\';render()">Remover</button>':'Clique para adicionar')+"</div></div></div>";SECTIONS.forEach(function(s){h+='<div class="card"><div class="section-label">'+s.section+'</div><div class="form-grid">';s.fields.forEach(function(f){var v=editData[f.key]||"";var cls=f.full?"form-group full":"form-group";var fc=v?"filled":"";h+='<div class="'+cls+'"><label>'+f.label+"</label>";if(f.options){h+='<select class="'+fc+'" onchange="editData[\''+f.key+"']=this.value\"><option value=\"\">—</option>";f.options.forEach(function(o){h+='<option value="'+o+'"'+(v===o?" selected":"")+">"+o+"</option>"});h+="</select>"}else if(f.multiline)h+='<textarea class="'+fc+'" onchange="editData[\''+f.key+"']=this.value\">"+v+"</textarea>";else h+='<input class="'+fc+'" value="'+v+'" onchange="editData[\''+f.key+"']=this.value\">";h+="</div>"});h+="</div></div>"});el.innerHTML=h+'<button class="btn btn-success btn-lg" onclick="saveEmp()">Salvar</button></div>'}
+function pickPhoto(){var i=document.getElementById("photoInput");i.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var img=new Image();img.onload=function(){var c=document.createElement("canvas");var M=300,w=img.width,ht=img.height;if(w>ht){if(w>M){ht*=M/w;w=M}}else{if(ht>M){w*=M/ht;ht=M}}c.width=w;c.height=ht;c.getContext("2d").drawImage(img,0,0,w,ht);editData.photo=c.toDataURL("image/jpeg",0.8);render()};img.src=ev.target.result};r.readAsDataURL(f);i.value=""};i.click()}
+
+// ── OCR ──
+function renderOCR(el){var h='<div class="anim" style="max-width:760px"><div class="card"><h3 style="font-size:14px;font-weight:700;margin-bottom:6px">Importar Ficha</h3><p style="font-size:12px;color:var(--text-sec);margin-bottom:20px">Envie foto da ficha de registro.</p>';if(!ocrImageData)h+='<div class="upload-zone" onclick="pickOcr()"><div style="font-size:32px;margin-bottom:8px">📄</div><div style="font-size:13px;font-weight:600">Clique para enviar</div></div>';else h+='<div class="img-preview" style="margin-bottom:12px"><img src="data:'+ocrImageType+";base64,"+ocrImageData+'"><button class="img-close" onclick="ocrImageData=null;render()">×</button></div><div style="display:flex;gap:10px"><button class="btn btn-red btn-lg" style="flex:1" onclick="runOCR()" id="ocrBtn">Extrair Dados</button><button class="btn btn-secondary" onclick="pickOcr()">Trocar</button></div>';el.innerHTML=h+'<div id="ocrError"></div></div><div id="ocrResult"></div></div>'}
+function pickOcr(){var i=document.getElementById("fileInput");i.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){ocrImageData=ev.target.result.split(",")[1];ocrImageType=f.type||"image/jpeg";i.value="";render()};r.readAsDataURL(f)};i.click()}
+function runOCR(){var btn=document.getElementById("ocrBtn");btn.textContent="Analisando...";btn.disabled=true;btn.style.opacity="0.6";document.getElementById("ocrError").innerHTML="";api("/api/ocr",{method:"POST",body:{image:ocrImageData,mimeType:ocrImageType}}).then(function(p){editData=emptyEmp();Object.keys(p).forEach(function(k){if(p[k]&&editData.hasOwnProperty(k))editData[k]=p[k]});toast("Dados extraídos!");var r='<div class="card" style="margin-top:12px"><div style="display:flex;justify-content:space-between;margin-bottom:16px"><div><h3 style="font-size:14px;font-weight:700">Dados Extraídos</h3></div><button class="btn btn-success" onclick="saveEmp()">Salvar</button></div>';SECTIONS.forEach(function(s){r+='<div class="section-label" style="margin-top:12px">'+s.section+'</div><div class="form-grid">';s.fields.forEach(function(f){var v=editData[f.key]||"";r+='<div class="'+(f.full?"form-group full":"form-group")+'"><label>'+f.label+"</label>";if(f.options){r+='<select class="'+(v?"filled":"")+'" onchange="editData[\''+f.key+"']=this.value\"><option value=\"\">—</option>";f.options.forEach(function(o){r+='<option value="'+o+'"'+(v===o?" selected":"")+">"+o+"</option>"});r+="</select>"}else r+='<input class="'+(v?"filled":"")+'" value="'+v+'" onchange="editData[\''+f.key+"']=this.value\">";r+="</div>"});r+="</div>"});document.getElementById("ocrResult").innerHTML=r+'<button class="btn btn-success btn-lg" onclick="saveEmp()" style="margin-top:12px">Salvar</button></div>'}).catch(function(e){document.getElementById("ocrError").innerHTML='<div style="margin-top:12px;padding:10px;background:var(--danger-light);border-radius:10px;color:var(--danger);font-size:12px">'+e.message+"</div>"}).finally(function(){btn.textContent="Extrair Dados";btn.disabled=false;btn.style.opacity="1"})}
+
+// ── DOCUMENTS ──
+function renderDocs(el){
+  if(!employees.length){el.innerHTML='<div class="anim empty"><div style="font-size:40px;opacity:.6;margin-bottom:12px">📋</div><div style="font-size:14px;font-weight:600">Cadastre funcionários primeiro</div><button class="btn btn-primary" onclick="goTo(\'add\')" style="margin-top:16px">Cadastrar</button></div>';return}
+  var cats={};templates.forEach(function(t){if(!cats[t.category])cats[t.category]={label:t.categoryLabel,icon:t.icon,items:[]};cats[t.category].items.push(t)});
+  var h='<div class="anim">';
+  Object.keys(cats).forEach(function(catKey){
+    var cat=cats[catKey];
+    h+='<div style="margin-bottom:20px"><h3 style="font-size:14px;font-weight:700;margin-bottom:10px">'+cat.icon+" "+cat.label+" ("+cat.items.length+")</h3>";
+    h+='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">';
+    cat.items.forEach(function(t){
+      h+='<div class="doc-card" onclick="openDoc(\''+t.id+'\')"><div class="doc-icon">'+t.icon+'</div><div><div class="doc-title">'+t.title+"</div></div></div>";
+    });
     h+="</div></div>";
   });
   el.innerHTML=h+"</div>";
 }
 
-function renderForm(el){
-  var h='<div class="anim"><div style="display:flex;gap:10px;margin-bottom:20px"><button class="btn btn-secondary" onclick="goTo(\'list\')">← Voltar</button><button class="btn btn-success btn-lg" onclick="saveEmp()">Salvar</button></div>';
-  h+='<div class="card"><div class="section-label">Foto</div><div style="display:flex;align-items:center;gap:20px"><div class="photo-upload" onclick="pickPhoto()">'+(editData.photo?'<img src="'+editData.photo+'">':'<div style="font-size:11px;color:var(--text-muted);text-align:center;padding:4px">📷<br>Foto</div>')+'</div><div><div style="font-size:13px;color:var(--text-sec)">Clique para adicionar foto</div>'+(editData.photo?'<button class="btn btn-sm btn-danger" onclick="clearPhoto()" style="margin-top:8px">Remover</button>':"")+"</div></div></div>";
-  SECTIONS.forEach(function(s){
-    h+='<div class="card"><div class="section-label">'+s.section+'</div><div class="form-grid">';
-    s.fields.forEach(function(f){
-      var v=editData[f.key]||"";var cls=f.full?"form-group full":"form-group";var fc=v?"filled":"";
-      h+='<div class="'+cls+'"><label>'+f.label+"</label>";
-      if(f.options){h+='<select class="'+fc+'" onchange="editData[\''+f.key+"']=this.value\"><option value=\"\">—</option>";f.options.forEach(function(o){h+='<option value="'+o+'" '+(v===o?"selected":"")+">"+o+"</option>"});h+="</select>"}
-      else if(f.multiline){h+='<textarea class="'+fc+'" onchange="editData[\''+f.key+"']=this.value\">"+v+"</textarea>"}
-      else{h+='<input class="'+fc+'" value="'+v+'" onchange="editData[\''+f.key+"']=this.value\">"}
+function openDoc(templateId){
+  docSelectedTemplate=templates.find(function(t){return t.id===templateId});
+  if(!docSelectedTemplate)return;
+  docSelectedEmpId=employees.length?employees[0].id:null;
+  docCustom={};
+  if(docSelectedTemplate.customFields){
+    docSelectedTemplate.customFields.forEach(function(f){docCustom[f.key]=f.default||""});
+  }
+  currentView="doc-fill";
+  render();
+}
+
+function renderDocFill(el){
+  if(!docSelectedTemplate)return;
+  var t=docSelectedTemplate;
+  var h='<div class="anim"><div style="display:flex;gap:8px;margin-bottom:18px"><button class="btn btn-secondary" onclick="goTo(\'docs\')">← Voltar</button><button class="btn btn-red btn-lg" onclick="generateDoc()">⬇ Gerar PDF</button></div>';
+
+  // Template info
+  h+='<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="font-size:28px">'+t.icon+'</div><div><h2 style="font-size:16px;font-weight:800">'+t.title+'</h2><div style="font-size:12px;color:var(--text-muted)">'+t.categoryLabel+'</div></div></div>';
+
+  // Employee selector
+  h+='<div class="form-group" style="margin-bottom:14px"><label>Funcionário</label><select onchange="docSelectedEmpId=parseInt(this.value);render()">';
+  employees.forEach(function(e){h+='<option value="'+e.id+'"'+(e.id==docSelectedEmpId?" selected":"")+">"+e.nome+" — "+(e.cargo||"Sem cargo")+"</option>"});
+  h+="</select></div>";
+
+  // Preview employee data
+  var emp=employees.find(function(e){return e.id==docSelectedEmpId});
+  if(emp){
+    h+='<div style="background:#f8f9fb;border-radius:10px;padding:12px;margin-bottom:14px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+avt(emp)+'<div><div style="font-weight:600;font-size:13px">'+emp.nome+'</div><div style="font-size:11px;color:var(--text-muted)">CPF: '+(emp.cpf||"—")+" | Cargo: "+(emp.cargo||"—")+"</div></div></div></div>";
+  }
+  h+="</div>";
+
+  // Custom fields
+  if(t.customFields&&t.customFields.length){
+    h+='<div class="card"><div class="section-label">Campos do Documento</div><div class="form-grid">';
+    t.customFields.forEach(function(f){
+      var v=docCustom[f.key]||"";
+      h+='<div class="form-group'+(f.type==="textarea"?" full":"")+'"><label>'+f.label+"</label>";
+      if(f.type==="textarea"){
+        h+='<textarea onchange="docCustom[\''+f.key+"']=this.value\">"+v+"</textarea>";
+      }else if(f.type==="select"&&f.options){
+        h+='<select onchange="docCustom[\''+f.key+"']=this.value\">";
+        f.options.forEach(function(o){h+='<option value="'+o+'"'+(v===o?" selected":"")+">"+o+"</option>"});
+        h+="</select>";
+      }else{
+        h+='<input value="'+v+'" onchange="docCustom[\''+f.key+"']=this.value\">";
+      }
       h+="</div>";
     });
     h+="</div></div>";
-  });
-  el.innerHTML=h+'<button class="btn btn-success btn-lg" onclick="saveEmp()">Salvar</button></div>';
-}
-
-function clearPhoto(){editData.photo="";render()}
-function pickPhoto(){
-  var inp=document.getElementById("photoInput");
-  inp.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){var img=new Image();img.onload=function(){var c=document.createElement("canvas");var M=300;var w=img.width,h=img.height;if(w>h){if(w>M){h*=M/w;w=M}}else{if(h>M){w*=M/h;h=M}}c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);editData.photo=c.toDataURL("image/jpeg",0.8);render()};img.src=ev.target.result};r.readAsDataURL(f);inp.value=""};
-  inp.click();
-}
-
-// OCR
-function renderOCR(el){
-  var h='<div class="anim" style="max-width:780px"><div class="card"><h3 style="font-size:15px;font-weight:700;margin-bottom:6px">Importar Ficha</h3><p style="font-size:13px;color:var(--text-sec);margin-bottom:22px">Envie foto ou print da ficha de registro.</p>';
-  if(!ocrImageData){h+='<div class="upload-zone" onclick="pickOcrImg()"><div style="font-size:36px;margin-bottom:10px">📄</div><div style="font-size:14px;font-weight:600">Clique para enviar</div></div>'}
-  else{h+='<div class="img-preview" style="margin-bottom:14px"><img src="data:'+ocrImageType+';base64,'+ocrImageData+'"><button class="img-close" onclick="ocrImageData=null;render()">×</button></div><div style="display:flex;gap:10px"><button class="btn btn-primary btn-lg" style="flex:1" onclick="runOCR()" id="ocrBtn">Extrair Dados</button><button class="btn btn-secondary" onclick="pickOcrImg()">Trocar</button></div>'}
-  el.innerHTML=h+'<div id="ocrError"></div></div><div id="ocrResult"></div></div>';
-}
-
-function pickOcrImg(){
-  var inp=document.getElementById("fileInput");
-  inp.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){ocrImageData=ev.target.result.split(",")[1];ocrImageType=f.type||"image/jpeg";inp.value="";render()};r.readAsDataURL(f)};
-  inp.click();
-}
-
-function runOCR(){
-  var btn=document.getElementById("ocrBtn");btn.textContent="Analisando...";btn.disabled=true;btn.style.background="#94a3b8";
-  document.getElementById("ocrError").innerHTML="";
-  api("/api/ocr",{method:"POST",body:{image:ocrImageData,mimeType:ocrImageType,type:"ocr"}}).then(function(p){
-    editData=emptyEmp();Object.keys(p).forEach(function(k){if(p[k]&&editData.hasOwnProperty(k))editData[k]=p[k]});
-    toast("Dados extraídos!");
-    var r='<div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;margin-bottom:18px"><div><h3 style="font-size:15px;font-weight:700">Dados Extraídos</h3><p style="font-size:12px;color:var(--text-sec)">Revise e salve</p></div><button class="btn btn-success" onclick="saveEmp()">Salvar</button></div>';
-    r+='<div style="display:flex;align-items:center;gap:20px;margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border)"><div class="photo-upload" onclick="pickPhoto()">'+(editData.photo?'<img src="'+editData.photo+'">':'<div style="font-size:11px;color:var(--text-muted);text-align:center">📷 Foto</div>')+'</div><div><div style="font-size:15px;font-weight:700">'+(editData.nome||"?")+'</div><div style="font-size:13px;color:var(--text-sec)">'+(editData.cargo||"")+" "+(editData.cpf?"· "+editData.cpf:"")+"</div></div></div>";
-    SECTIONS.forEach(function(s){
-      r+='<div class="section-label" style="margin-top:14px">'+s.section+'</div><div class="form-grid">';
-      s.fields.forEach(function(f){var v=editData[f.key]||"";var c=f.full?"form-group full":"form-group";var fc=v?"filled":"";
-        r+='<div class="'+c+'"><label>'+f.label+"</label>";
-        if(f.options){r+='<select class="'+fc+'" onchange="editData[\''+f.key+"']=this.value\"><option value=\"\">—</option>";f.options.forEach(function(o){r+='<option value="'+o+'" '+(v===o?"selected":"")+">"+o+"</option>"});r+="</select>"}
-        else{r+='<input class="'+fc+'" value="'+v+'" onchange="editData[\''+f.key+"']=this.value\">"}
-        r+="</div>"});r+="</div>"});
-    document.getElementById("ocrResult").innerHTML=r+'<button class="btn btn-success btn-lg" onclick="saveEmp()" style="margin-top:14px">Salvar</button></div>';
-  }).catch(function(e){document.getElementById("ocrError").innerHTML='<div style="margin-top:14px;padding:12px;background:var(--danger-light);border-radius:10px;color:var(--danger);font-size:13px">'+e.message+"</div>"}).finally(function(){btn.textContent="Extrair Dados";btn.disabled=false;btn.style.background=""});
-}
-
-// FORM FILLER
-function renderFiller(el){
-  if(!employees.length){el.innerHTML='<div class="anim empty"><div style="font-size:44px;opacity:.6;margin-bottom:14px">📋</div><div style="font-size:15px;font-weight:600">Nenhum funcionário</div><button class="btn btn-primary" onclick="goTo(\'add\')" style="margin-top:18px">Cadastrar</button></div>';return}
-  var h='<div class="anim">';
-  // Step 1
-  h+='<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div class="step-num" style="background:var(--accent-light);color:var(--accent)">1</div><div><h3 style="font-size:14px;font-weight:700;margin:0">Enviar Formulário</h3><p style="font-size:12px;color:var(--text-sec);margin:0">Imagem, PDF ou Word</p></div></div>';
-  if(!formFileType){h+='<div class="upload-zone" onclick="pickFormFile()"><div style="font-size:14px;font-weight:600">Clique para enviar</div><div style="font-size:12px;color:var(--text-muted);margin-top:4px"><strong>Aceita: Imagem, PDF e Word (.docx)</strong></div></div>'}
-  else{
-    h+='<div style="display:flex;gap:14px;align-items:flex-start">';
-    if(formPreviewUrl){h+='<div class="img-preview" style="flex:0 0 200px"><img src="'+formPreviewUrl+'" style="width:200px;height:160px;object-fit:cover"><button class="img-close" onclick="goTo(\'form-filler\')">×</button></div>'}
-    else{h+='<div style="flex:0 0 200px;height:160px;background:#f8f9fb;border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center"><div style="text-align:center;font-size:28px">📄<br><span style="font-size:11px;font-weight:700;color:var(--accent)">'+formFileType.toUpperCase()+'</span></div></div>'}
-    h+='<div style="flex:1"><button class="btn btn-primary" style="width:100%" onclick="analyzeForm()" id="formBtn">'+(formFields?"✓ Analisado":"Analisar")+"</button>"+(formFields?'<div style="margin-top:6px;font-size:12px;color:var(--success);font-weight:600">'+(formFields.fields?formFields.fields.length:0)+' campos — "'+formFields.formTitle+'"</div>':"")+"</div></div>";
   }
-  h+="</div>";
-  // Step 2
-  if(formFields){
-    h+='<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div class="step-num" style="background:var(--accent-light);color:var(--accent)">2</div><div><h3 style="font-size:14px;font-weight:700;margin:0">Selecionar Funcionários</h3></div></div><div style="display:flex;gap:8px;margin-bottom:14px"><button class="btn btn-sm btn-secondary" onclick="selAll()">Todos</button><button class="btn btn-sm btn-secondary" onclick="formSelectedEmps=[];render()">Limpar</button></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px">';
-    employees.forEach(function(e){var s=formSelectedEmps.indexOf(e.id)>=0;h+='<div class="check-card '+(s?"selected":"")+'" onclick="toggleSel('+e.id+')"><div class="check-box">'+(s?"✓":"")+'</div><div style="flex:1;min-width:0"><div style="font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+e.nome+'</div><div style="font-size:11px;color:var(--text-muted)">'+(e.cargo||"")+"</div></div></div>"});
-    h+="</div>";
-    if(formSelectedEmps.length){h+='<button class="btn btn-success btn-lg" style="width:100%;margin-top:14px" onclick="genForms()">Gerar '+formSelectedEmps.length+" PDF"+(formSelectedEmps.length>1?"s":"")+"</button>"}
-    h+="</div>";
-  }
-  // Step 3
-  if(formResult){
-    h+='<div class="card"><div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div class="step-num" style="background:var(--success-light);color:var(--success)">3</div><div><h3 style="font-size:14px;font-weight:700;margin:0">PDFs Prontos</h3></div></div>';
-    formResult.forEach(function(r,i){h+='<div class="result-row"><div style="display:flex;align-items:center;gap:10px">'+avt(r.emp)+'<div><div style="font-weight:600;font-size:13px">'+r.emp.nome+'</div><div style="font-size:11px;color:var(--text-muted)">'+r.filled+"/"+r.total+' campos</div></div></div><button class="btn btn-primary btn-sm" onclick="downloadPdf('+i+')">⬇ Baixar PDF</button></div>'});
-    h+="</div>";
-  }
-  el.innerHTML=h+"</div>";
+
+  h+='<button class="btn btn-red btn-lg" onclick="generateDoc()" style="width:100%">⬇ Gerar e Baixar PDF</button></div>';
+  el.innerHTML=h;
 }
 
-function selAll(){formSelectedEmps=employees.map(function(e){return e.id});render()}
-function toggleSel(id){var i=formSelectedEmps.indexOf(id);if(i>=0)formSelectedEmps.splice(i,1);else formSelectedEmps.push(id);render()}
-
-function pickFormFile(){
-  var inp=document.getElementById("formFileInput");
-  inp.onchange=function(e){
-    var file=e.target.files[0]; if(!file) return;
-    var ext=file.name.split(".").pop().toLowerCase();
-    var reader=new FileReader();
-    reader.onload=function(ev){
-      var b64=ev.target.result.split(",")[1];
-      if(ext==="pdf"){
-        formFileType="pdf"; formPdfB64=b64; formDocxB64="";
-        pdfjsLib.getDocument({data:atob(b64).split("").map(function(c){return c.charCodeAt(0)})}).promise.then(function(pdf){
-          return pdf.getPage(1);
-        }).then(function(page){
-          var vp=page.getViewport({scale:2});
-          var canvas=document.createElement("canvas");canvas.width=vp.width;canvas.height=vp.height;
-          return page.render({canvasContext:canvas.getContext("2d"),viewport:vp}).promise.then(function(){return canvas});
-        }).then(function(canvas){
-          formPreviewUrl=canvas.toDataURL("image/jpeg",0.9);
-          formImageB64=formPreviewUrl.split(",")[1]; formImageMime="image/jpeg";
-          render();
-        }).catch(function(){formPreviewUrl="";render()});
-      } else if(ext==="docx"||ext==="doc"){
-        formFileType="docx"; formDocxB64=b64; formPdfB64=""; formPreviewUrl=""; formImageB64="";
-        render();
-      } else {
-        formFileType="image"; formImageB64=b64; formImageMime=file.type||"image/jpeg";
-        formPreviewUrl=ev.target.result; formPdfB64=""; formDocxB64="";
-        render();
-      }
-      formFields=null; formResult=null; inp.value="";
-    };
-    reader.readAsDataURL(file);
-  };
-  inp.click();
-}
-
-function analyzeForm(){
-  var btn=document.getElementById("formBtn"); btn.textContent="Analisando..."; btn.disabled=true;
-  var promise;
-  if(formFileType==="docx"){
-    promise = api("/api/extract-docx",{method:"POST",body:{fileBase64:formDocxB64}}).then(function(r){
-      return api("/api/analyze-text",{method:"POST",body:{text:r.text,type:"form"}});
-    });
-  } else {
-    promise = api("/api/ocr",{method:"POST",body:{image:formImageB64,mimeType:formImageMime||"image/jpeg",type:"form"}});
-  }
-  promise.then(function(r){formFields=r;toast("Formulário analisado!")}).catch(function(e){toast("Erro: "+e.message,"error")}).finally(function(){render()});
-}
-
-function genForms(){
-  formResult=formSelectedEmps.map(function(id){
-    var emp=employees.find(function(e){return e.id==id});if(!emp)return null;
-    var fields=(formFields.fields||[]).map(function(f){return{label:f.label,key:f.key,value:f.key==="custom"?"":(emp[f.key]||""),x:f.x,y:f.y,w:f.w}});
-    return{emp:emp,fields:fields,filled:fields.filter(function(f){return f.value}).length,total:fields.length};
-  }).filter(function(x){return x});
-  render();
-}
-
-function downloadPdf(idx){
-  var r=formResult[idx]; loading(true);
-  var body={fields:r.fields,employee:r.emp,formTitle:formFields?formFields.formTitle:"Formulário"};
-  if(formPdfB64) body.originalPdfBase64=formPdfB64;
-  else if(formImageB64){body.originalImage=formImageB64;body.originalMimeType=formImageMime}
-  fetch("/api/generate-pdf",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}).then(function(resp){
-    if(!resp.ok) return resp.json().then(function(e){throw new Error(e.error)});
+function generateDoc(){
+  if(!docSelectedTemplate||!docSelectedEmpId){toast("Selecione um funcionário","error");return}
+  var emp=employees.find(function(e){return e.id==docSelectedEmpId});
+  if(!emp){toast("Funcionário não encontrado","error");return}
+  loading(true);
+  fetch("/api/generate-document",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({templateId:docSelectedTemplate.id,employee:emp,customFields:docCustom})
+  }).then(function(resp){
+    if(!resp.ok)return resp.json().then(function(e){throw new Error(e.error)});
     return resp.blob();
   }).then(function(blob){
-    var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;
-    a.download=(r.emp.nome||"formulario").replace(/[^a-zA-Z0-9\s]/g,"").replace(/\s+/g,"_")+".pdf";
-    a.click();URL.revokeObjectURL(url);toast("PDF baixado!");
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement("a");a.href=url;
+    a.download=(docSelectedTemplate.title+" - "+(emp.nome||"doc")).replace(/[^a-zA-Z0-9À-ú\s\-]/g,"").replace(/\s+/g,"_")+".pdf";
+    a.click();URL.revokeObjectURL(url);
+    toast("PDF gerado com sucesso!");
   }).catch(function(e){toast("Erro: "+e.message,"error")}).finally(function(){loading(false)});
 }
 
